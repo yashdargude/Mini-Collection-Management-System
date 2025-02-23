@@ -37,7 +37,7 @@ const login = async (req, res, next) => {
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
-    await redisClient.set( token , "valid" , {EX:3600});
+    await redisClient.set(token, "value", { EX: 3600 });
     res.json({ token });
   } catch (err) {
     next(err);

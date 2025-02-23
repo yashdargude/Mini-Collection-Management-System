@@ -18,7 +18,7 @@ const { validate } = require("../middleware/validateMiddleware");
 const {
   validateFileUpload,
   validateBulkUploadData,
-} = require("../validators/mini_manage/backend/validators/customerBulkUploadValidator");
+} = require("../validators/customerBulkUploadValidator");
 
 router.get("/", authenticateToken, getCustomers);
 router.post(

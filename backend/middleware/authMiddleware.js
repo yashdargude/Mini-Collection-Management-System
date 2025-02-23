@@ -6,7 +6,7 @@ const authenticateToken = async (req, res, next) => {
   if (!token) return res.sendStatus(401);
 
   try {
-    const payload = jwt.verify(token , process.env.JWT_SECRET);
+    const payload = jwt.verify(token, process.env.JWT_SECRET);
 
     const tokenStatus = await redisClient.get(token);
     if (!tokenStatus) {
@@ -14,12 +14,9 @@ const authenticateToken = async (req, res, next) => {
     }
     req.user = payload;
     next();
-  }
-  catch (error){
+  } catch (error) {
     res.sendStatus(403);
   }
-
-
 };
 
 module.exports = { authenticateToken };

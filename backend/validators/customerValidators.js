@@ -4,13 +4,13 @@ const { body } = require("express-validator");
 const createCustomerValidator = [
   body("name").notEmpty().withMessage("Name is required"),
   body("contact").isEmail().withMessage("Contact must be a valid email"),
-  body("outstandingPayment")
+  body("outstanding_payment")
     .isNumeric()
     .withMessage("Outstanding payment must be numeric"),
-  body("paymentDueDate")
+  body("payment_due_date")
     .isDate()
     .withMessage("Payment due date must be a valid date"),
-  body("paymentStatus")
+  body("payment_status")
     .isIn(["completed", "pending"])
     .withMessage("Payment status must be either 'completed' or 'pending'"),
 ];
