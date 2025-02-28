@@ -1,0 +1,58 @@
+# Node.js dependencies  
+node_modules/  
+npm-debug.log  
+yarn-error.log  
+pnpm-debug.log  
+
+# Environment variables  
+.env  
+.env.local  
+.env.development  
+.env.test  
+.env.production  
+
+# Logs  
+logs/  
+*.log  
+yarn-debug.log*  
+npm-debug.log*  
+pnpm-debug.log*  
+debug.log*  
+error.log*  
+output.log*  
+
+# OS-specific files  
+.DS_Store  
+Thumbs.db  
+
+# Compiled files  
+dist/  
+build/  
+out/  
+
+# Temporary files  
+tmp/  
+temp/  
+.cache/  
+.vscode/  
+.idea/  
+
+# Database  
+*.sqlite  
+*.sqlite-journal  
+db-dump.sql  
+
+# Testing  
+coverage/  
+.jest/  
+.nyc_output/  
+
+# Docker & Deployment  
+docker-compose.override.yml  
+.dockerignore  
+
+# TypeScript  
+*.tsbuildinfo  
+
+# Misc  
+!.github/workflows/  .env
