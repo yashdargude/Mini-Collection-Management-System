@@ -5,6 +5,7 @@ import {
   updatePaymentStatus,
 } from "../../Utils/api";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const PaymentPage = () => {
   const [customers, setCustomers] = useState([]);
@@ -73,42 +74,69 @@ const PaymentPage = () => {
   };
 
   return (
-    <div>
-      <h1>Payment Page</h1>
-      <form>
-        <label>Customer:</label>
-        <select
-          value={selectedCustomerId}
-          onChange={(e) => setSelectedCustomerId(e.target.value)}
-        >
-          <option value="">Select a customer</option>
-          {customers.map((customer) => (
-            <option key={customer.id} value={customer.id}>
-              {customer.name}
-            </option>
-          ))}
-        </select>
-        <br />
-        <label>Amount:</label>
-        <input
-          type="number"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-        />
-        <br />
-        <label>Payment Status:</label>
-        <input
-          type="text"
-          value={paymentStatus}
-          onChange={(e) => setPaymentStatus(e.target.value)}
-        />
-        <br />
-        {error && <div className="error">{error}</div>}
-        <button onClick={handlePayment}>Make Payment</button>
-        <button onClick={handleUpdatePaymentStatus}>
-          Update Payment Status
-        </button>
+    <div className="container mx-auto mt-10 rounded-lg bg-indigo-400 p-6 shadow-lg">
+      <h1 className="mb-6 text-center text-3xl font-bold">Payment Page</h1>
+      <form className="space-y-4">
+        <div>
+          <label className="mb-2 block text-lg font-medium">Customer:</label>
+          <select
+            className="w-full rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            value={selectedCustomerId}
+            onChange={(e) => setSelectedCustomerId(e.target.value)}
+          >
+            <option value="">Select a customer</option>
+            {customers.map((customer) => (
+              <option key={customer.id} value={customer.id}>
+                {customer.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label className="mb-2 block text-lg font-medium">Amount:</label>
+          <input
+            className="w-full rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            type="number"
+            value={amount}
+            placeholder="add amount"
+            onChange={(e) => setAmount(e.target.value)}
+          />
+        </div>
+        <div>
+          <label className="mb-2 block text-lg font-medium">
+            Payment Status:
+          </label>
+          <input
+            className="w-full rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            type="text"
+            value={paymentStatus}
+            placeholder="status"
+            onChange={(e) => setPaymentStatus(e.target.value)}
+          />
+        </div>
+        {error && <div className="text-red-500">{error}</div>}
+        <div className="flex space-x-4">
+          <button
+            className="w-full rounded bg-blue-500 px-4 py-2 text-white transition duration-300 hover:bg-blue-700"
+            onClick={handlePayment}
+          >
+            Make Payment
+          </button>
+          <button
+            className="w-full rounded bg-green-500 px-4 py-2 text-white transition duration-300 hover:bg-green-700"
+            onClick={handleUpdatePaymentStatus}
+          >
+            Update Payment Status
+          </button>
+        </div>
       </form>
+      <div className="mt-6 text-center">
+        <Link to="/customers">
+          <button className="rounded bg-gray-500 px-4 py-2 text-white transition duration-300 hover:bg-gray-700">
+            Go to Customer Page
+          </button>
+        </Link>
+      </div>
     </div>
   );
 };

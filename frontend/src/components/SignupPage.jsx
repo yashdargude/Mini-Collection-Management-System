@@ -1,6 +1,7 @@
 // components/SignupPage.js
 import React, { useState } from "react";
 import { register } from "../Utils/api";
+import { Link } from "react-router-dom";
 const SignupPage = () => {
   const [username, setusername] = useState("");
   const [email, setEmail] = useState("");
@@ -43,6 +44,7 @@ const SignupPage = () => {
             value={username}
             onChange={(event) => setusername(event.target.value)}
             placeholder="John Doe"
+            autoComplete="username"
           />
         </div>
         <div className="mb-4">
@@ -59,6 +61,7 @@ const SignupPage = () => {
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             placeholder="your@email.com"
+            autoComplete="email"
           />
         </div>
         <div className="mb-4">
@@ -75,6 +78,7 @@ const SignupPage = () => {
             value={password}
             onChange={(event) => setPassword(event.target.value)}
             placeholder="********"
+            autoComplete="new-password"
           />
         </div>
         <div className="mb-4">
@@ -91,6 +95,7 @@ const SignupPage = () => {
             value={confirmPassword}
             onChange={(event) => setConfirmPassword(event.target.value)}
             placeholder="********"
+            autoComplete="new-password"
           />
         </div>
         {error && (
@@ -102,6 +107,14 @@ const SignupPage = () => {
         >
           Signup
         </button>
+        <div className="mt-4 text-center">
+          <p className="text-sm text-gray-600">
+            Already have an account?{" "}
+            <Link to="/login" className="text-blue-500 hover:text-blue-700">
+              Login
+            </Link>
+          </p>
+        </div>
       </form>
     </div>
   );

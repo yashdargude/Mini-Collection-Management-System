@@ -28,6 +28,8 @@ const login = async (req, res, next) => {
     if (!user) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
+    console.log(user);
+
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) {
       return res.status(400).json({ message: "Invalid credentials" });
@@ -39,7 +41,7 @@ const login = async (req, res, next) => {
     );
     await redisClient.set(token, "value", { EX: 3600 });
 
-    res.json({ token });
+    res.json({ token, user: user.username });
   } catch (err) {
     next(err);
   }

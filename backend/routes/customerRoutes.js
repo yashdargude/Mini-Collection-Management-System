@@ -32,6 +32,7 @@ router.post(
 
 router.put("/:id", authenticateToken, updateCustomer);
 router.delete("/:id", authenticateToken, deleteCustomer);
+
 router.post(
   "/upload",
   authenticateToken,

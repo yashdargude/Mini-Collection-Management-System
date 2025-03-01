@@ -1,11 +1,15 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   getCustomers,
   updateCustomer,
   createCustomer,
   deleteCustomer,
+  bulkUploadCustomers,
+  getUploadTemplate,
 } from "../../Utils/api";
 import { Table, Button, Modal, Form } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const CustomerPage = () => {
   const [customers, setCustomers] = useState([]);
@@ -19,6 +23,8 @@ const CustomerPage = () => {
     payment_status: "pending",
   });
   const [error, setError] = useState(null);
+  const [file, setFile] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCustomers = async () => {
@@ -95,13 +101,73 @@ const CustomerPage = () => {
     }
   };
 
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+  };
+
+  const handleFileUpload = async (e) => {
+    e.preventDefault();
+    if (!file) {
+      setError("Please select a file to upload");
+      return;
+    }
+    const formData = new FormData();
+    formData.append("file", file);
+    try {
+      const response = await bulkUploadCustomers(formData);
+      console.log(response.data);
+      setError(null);
+      // Optionally, refresh the customer list after upload
+      const fetchCustomers = async () => {
+        try {
+          const response = await getCustomers();
+          setCustomers(response.data);
+        } catch (err) {
+          console.error("Error fetching customers", err);
+        }
+      };
+      fetchCustomers();
+    } catch (error) {
+      console.error("File upload failed", error);
+      setError("File upload failed");
+    }
+  };
+
+  const handleDownloadTemplate = async () => {
+    try {
+      const response = await getUploadTemplate();
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "customer_upload_template.xlsx");
+      document.body.appendChild(link);
+      link.click();
+    } catch (error) {
+      console.error("Failed to download template", error);
+    }
+  };
+
+  const handlelogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("username");
+    navigate("/login");
+  };
+
+  const formatDate = (dateString) => {
+    const options = { year: "numeric", month: "2-digit", day: "2-digit" };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
+
   return (
-    <div>
-      <h2>Customers</h2>
-      <Button variant="primary" onClick={handleAddCustomer}>
-        Add Customer
-      </Button>
-      <Table striped bordered hover>
+    <div className="container mx-auto mt-4 rounded-lg bg-violet-300 p-4 shadow-md">
+      <div className="mb-4 flex items-center justify-between">
+        <h2 className="text-2xl font-bold">Customers</h2>
+        <Button className="bg-red-500" variant="danger" onClick={handlelogout}>
+          Logout
+        </Button>
+      </div>
+
+      <Table striped bordered hover className="customer-table">
         <thead>
           <tr>
             <th>ID</th>
@@ -120,7 +186,7 @@ const CustomerPage = () => {
               <td>{customer.name}</td>
               <td>{customer.contact}</td>
               <td>{customer.outstanding_payment}</td>
-              <td>{customer.payment_due_date}</td>
+              <td>{formatDate(customer.payment_due_date)}</td>
               <td>{customer.payment_status}</td>
               <td>
                 <Button
@@ -259,6 +325,38 @@ const CustomerPage = () => {
           </Button>
         </Modal.Footer>
       </Modal>
+      <div className="mt-4 pt-4">
+        <Button
+          variant="primary"
+          onClick={handleAddCustomer}
+          className="mb-4 bg-blue-500"
+        >
+          Add Customer
+        </Button>
+      </div>
+      <div className="mt-10">
+        <h3 className="mb-2 text-xl font-bold">Bulk Upload Customers</h3>
+        <Form onSubmit={handleFileUpload}>
+          <Form.Group controlId="fileUpload">
+            <Form.Label>Upload Excel File</Form.Label>
+            <Form.Control type="file" onChange={handleFileChange} />
+          </Form.Group>
+          <Button variant="primary" type="submit">
+            Upload
+          </Button>
+        </Form>
+        {error && <div className="mt-2 text-red-500">{error}</div>}
+        <Button variant="link" onClick={handleDownloadTemplate}>
+          Download Upload Template
+        </Button>
+      </div>
+      <div className="mt-6 text-center">
+        <Link to="/payment">
+          <button className="rounded bg-gray-500 px-4 py-2 text-white transition duration-300 hover:bg-gray-700">
+            Go to Payment Page
+          </button>
+        </Link>
+      </div>
     </div>
   );
 };

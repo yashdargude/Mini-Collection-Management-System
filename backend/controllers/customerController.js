@@ -20,8 +20,25 @@ const bulkUploadCustomers = async (req, res, next) => {
     const allData = req.bulkData;
     const totalRecords = allData.length;
 
+    // Iterate over each record and insert into the customers table
+    for (const record of allData) {
+      const {
+        "Customer Name": name,
+        "Contact Number": contact,
+        Email: email,
+        "Outstanding Amount": outstanding_payment,
+        "Payment Due Date": payment_due_date,
+        "Payment Status": payment_status,
+      } = record;
+
+      await db.query(
+        "INSERT INTO customers (name, contact, outstanding_payment, payment_due_date, payment_status) VALUES ($1, $2, $3, $4, $5)",
+        [name, email, outstanding_payment, payment_due_date, payment_status]
+      );
+    }
+
     res.json({
-      message: `Processed ${totalRecords} records from ${req.files.length} file(s) .`,
+      message: `Processed ${totalRecords} records from ${req.files.length} file(s).`,
       data: allData,
     });
   } catch (error) {
