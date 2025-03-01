@@ -21,6 +21,7 @@ const {
 } = require("../validators/customerBulkUploadValidator");
 
 router.get("/", authenticateToken, getCustomers);
+
 router.post(
   "/",
   authenticateToken,

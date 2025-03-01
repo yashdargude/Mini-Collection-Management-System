@@ -38,6 +38,7 @@ const login = async (req, res, next) => {
       { expiresIn: "1h" }
     );
     await redisClient.set(token, "value", { EX: 3600 });
+
     res.json({ token });
   } catch (err) {
     next(err);

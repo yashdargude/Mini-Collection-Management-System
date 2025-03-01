@@ -1,6 +1,6 @@
 // components/SignupPage.js
 import React, { useState } from "react";
-import { authApi } from "../Utils/api";
+import { register } from "../Utils/api";
 const SignupPage = () => {
   const [username, setusername] = useState("");
   const [email, setEmail] = useState("");
@@ -11,7 +11,12 @@ const SignupPage = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await authApi.signup({ username, password });
+      const response = await register({
+        username,
+        password,
+        email,
+        confirmPassword,
+      });
       console.log(response);
     } catch (error) {
       console.error(error);

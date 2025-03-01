@@ -39,11 +39,27 @@ const createCustomer = async (req, res, next) => {
       payment_due_date,
       payment_status,
     } = req.body;
-    const result = await db.query(
+    const customerResult = await db.query(
       "INSERT INTO customers (name, contact, outstanding_payment, payment_due_date, payment_status) VALUES ($1, $2, $3, $4, $5) RETURNING *",
       [name, contact, outstanding_payment, payment_due_date, payment_status]
     );
-    res.status(201).json(result.rows[0]);
+
+    const customerId = customerResult.rows[0].id;
+
+    // Create payment record
+    const paymentResult = await db.query(
+      "INSERT INTO payments (customer_id, payment_date, payment_amount, payment_method, payment_status, transaction_id, payment_type) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
+      [
+        customerId,
+        payment_due_date, // payment_date
+        outstanding_payment, // payment_amount
+        "Online Payment Services", // payment_method
+        payment_status, // payment_status
+        "INITIAL_PAYMENT_" + customerId, // transaction_id
+        "one-time", // payment_type
+      ]
+    );
+    res.status(201).json(customerResult.rows[0]);
   } catch (err) {
     next(err);
   }
@@ -66,6 +82,16 @@ const updateCustomer = async (req, res, next) => {
     );
     if (result.rows.length === 0) {
       return res.status(404).json({ message: "Customer not found" });
+    }
+
+    // Update payment record
+    const paymentResult = await db.query(
+      "UPDATE payments SET payment_date = $1, payment_amount = $2, payment_status = $3 WHERE customer_id = $4 RETURNING *",
+      [payment_due_date, outstanding_payment, payment_status, id]
+    );
+
+    if (paymentResult.rows.length === 0) {
+      return res.status(404).json({ message: "payment record  not found" });
     }
     res.json(result.rows[0]);
   } catch (err) {
