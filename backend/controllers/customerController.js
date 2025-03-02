@@ -35,6 +35,31 @@ const bulkUploadCustomers = async (req, res, next) => {
         "INSERT INTO customers (name, contact, outstanding_payment, payment_due_date, payment_status) VALUES ($1, $2, $3, $4, $5)",
         [name, email, outstanding_payment, payment_due_date, payment_status]
       );
+      // Extract customer ID from the result
+      // Fetch the last inserted customer ID
+      const customerIdResult = await db.query(
+        "SELECT id FROM customers ORDER BY id DESC LIMIT 1"
+      );
+      const customerId = customerIdResult.rows[0]?.id;
+
+      if (!customerId) {
+        console.error("Failed to retrieve customer ID");
+        continue; // Skip inserting payment if customerId is not found
+      }
+
+      // Insert corresponding payment record for the customer
+      await db.query(
+        "INSERT INTO payments (customer_id, payment_date, payment_amount, payment_method, payment_status, transaction_id, payment_type) VALUES ($1, $2, $3, $4, $5, $6, $7)",
+        [
+          customerId,
+          payment_due_date,
+          outstanding_payment,
+          "Online Payment Services",
+          payment_status,
+          "BULK_UPLOAD_" + customerId,
+          "one-time",
+        ]
+      );
     }
 
     res.json({

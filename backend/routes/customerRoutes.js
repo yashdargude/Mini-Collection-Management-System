@@ -36,7 +36,7 @@ router.delete("/:id", authenticateToken, deleteCustomer);
 router.post(
   "/upload",
   authenticateToken,
-  upload.array("file"),
+  upload.array("files"),
   validateFileUpload,
   validateBulkUploadData,
   bulkUploadCustomers
