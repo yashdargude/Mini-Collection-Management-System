@@ -1,9 +1,13 @@
-// components/SignupPage.js
 import React, { useState } from "react";
 import { register } from "../Utils/api";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+
 const SignupPage = () => {
-  const [username, setusername] = useState("");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -23,99 +27,104 @@ const SignupPage = () => {
       console.error(error);
     }
   };
-  // Call API endpoint to create new user
-  // ...
 
   return (
-    <div className="mx-auto mt-10 max-w-md rounded-lg bg-white p-4 shadow-md">
-      <h2 className="mb-4 text-lg font-bold">Signup</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label
-            className="mb-2 block text-sm font-bold text-gray-700"
-            htmlFor="name"
-          >
-            UserName
-          </label>
-          <input
-            className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
-            id="name"
-            type="text"
-            value={username}
-            onChange={(event) => setusername(event.target.value)}
-            placeholder="John Doe"
-            autoComplete="username"
-          />
-        </div>
-        <div className="mb-4">
-          <label
-            className="mb-2 block text-sm font-bold text-gray-700"
-            htmlFor="email"
-          >
-            Email
-          </label>
-          <input
-            className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
-            id="email"
-            type="email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            placeholder="your@email.com"
-            autoComplete="email"
-          />
-        </div>
-        <div className="mb-4">
-          <label
-            className="mb-2 block text-sm font-bold text-gray-700"
-            htmlFor="password"
-          >
-            Password
-          </label>
-          <input
-            className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
-            id="password"
-            type="password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            placeholder="********"
-            autoComplete="new-password"
-          />
-        </div>
-        <div className="mb-4">
-          <label
-            className="mb-2 block text-sm font-bold text-gray-700"
-            htmlFor="confirmPassword"
-          >
-            Confirm Password
-          </label>
-          <input
-            className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
-            id="confirmPassword"
-            type="password"
-            value={confirmPassword}
-            onChange={(event) => setConfirmPassword(event.target.value)}
-            placeholder="********"
-            autoComplete="new-password"
-          />
-        </div>
-        {error && (
-          <div className="mb-4 text-xs italic text-red-500">{error}</div>
-        )}
-        <button
-          className="focus:shadow-outline rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none"
-          type="submit"
-        >
-          Signup
-        </button>
-        <div className="mt-4 text-center">
-          <p className="text-sm text-gray-600">
-            Already have an account?{" "}
-            <Link to="/login" className="text-blue-500 hover:text-blue-700">
-              Login
-            </Link>
-          </p>
-        </div>
-      </form>
+    <div className="relative flex h-screen w-full items-center justify-center bg-gradient-to-br from-blue-900 to-purple-900">
+      {/* Background Video */}
+      <video
+        autoPlay
+        loop
+        muted
+        className="absolute left-0 top-0 h-full w-full object-cover opacity-30"
+        src="/bg4.mp4"
+      ></video>
+
+      <Card className="relative z-10 w-full max-w-md rounded-2xl bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 p-6 text-white shadow-2xl">
+        <h2 className="mb-4 text-center text-3xl font-extrabold italic tracking-wider text-white">
+          Join Us Now
+        </h2>
+        <p className="mb-6 text-center text-sm italic text-gray-300">
+          Create an account and unlock exclusive features!
+        </p>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <Label className="text-gray-300" htmlFor="username">
+                Username
+              </Label>
+              <Input
+                className="rounded-lg bg-gray-800 text-white placeholder-gray-400"
+                id="username"
+                type="text"
+                value={username}
+                onChange={(event) => setUsername(event.target.value)}
+                placeholder="John Doe"
+                autoComplete="username"
+              />
+            </div>
+            <div>
+              <Label className="text-gray-300" htmlFor="email">
+                Email
+              </Label>
+              <Input
+                className="rounded-lg bg-gray-800 text-white placeholder-gray-400"
+                id="email"
+                type="email"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                placeholder="your@email.com"
+                autoComplete="email"
+              />
+            </div>
+            <div>
+              <Label className="text-gray-300" htmlFor="password">
+                Password
+              </Label>
+              <Input
+                className="rounded-lg bg-gray-800 text-white placeholder-gray-400"
+                id="password"
+                type="password"
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                placeholder="********"
+                autoComplete="new-password"
+              />
+            </div>
+            <div>
+              <Label className="text-gray-300" htmlFor="confirmPassword">
+                Confirm Password
+              </Label>
+              <Input
+                className="rounded-lg bg-gray-800 text-white placeholder-gray-400"
+                id="confirmPassword"
+                type="password"
+                value={confirmPassword}
+                onChange={(event) => setConfirmPassword(event.target.value)}
+                placeholder="********"
+                autoComplete="new-password"
+              />
+            </div>
+            {error && (
+              <div className="text-xs italic text-red-500">{error}</div>
+            )}
+            <Button
+              type="submit"
+              className="w-full rounded-lg bg-gradient-to-r from-purple-600 to-blue-500 py-2 font-bold text-white shadow-md hover:opacity-90"
+            >
+              Sign Up
+            </Button>
+            <p className="mt-4 text-center text-sm text-gray-300">
+              Already have an account?{" "}
+              <Link
+                to="/login"
+                className="font-bold text-blue-400 hover:underline"
+              >
+                Login
+              </Link>
+            </p>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
 };

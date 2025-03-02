@@ -10,6 +10,7 @@ const {
   deleteCustomer,
   bulkUploadCustomers,
   getUploadTemplate,
+  getCustomerByID,
 } = require("../controllers/customerController");
 
 const { authenticateToken } = require("../middleware/authMiddleware");
@@ -21,6 +22,7 @@ const {
 } = require("../validators/customerBulkUploadValidator");
 
 router.get("/", authenticateToken, getCustomers);
+router.get("/${selectedCustomerId}", authenticateToken, getCustomerByID);
 
 router.post(
   "/",

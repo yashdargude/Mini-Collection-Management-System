@@ -15,6 +15,24 @@ const getCustomers = async (req, res, next) => {
   }
 };
 
+const getCustomerByID = async (req, res, next) => {
+  try {
+    const { id } = req.params; // Get customer ID from URL parameter
+
+    const result = await db.query("SELECT * FROM customers WHERE id = $1", [
+      id,
+    ]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: "Customer not found" });
+    }
+
+    res.json(result.rows[0]); // Return the specific customer details
+  } catch (err) {
+    next(err);
+  }
+};
+
 const bulkUploadCustomers = async (req, res, next) => {
   try {
     const allData = req.bulkData;
@@ -191,4 +209,5 @@ module.exports = {
   deleteCustomer,
   bulkUploadCustomers,
   getUploadTemplate,
+  getCustomerByID,
 };

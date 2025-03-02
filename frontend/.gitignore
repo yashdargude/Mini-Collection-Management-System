@@ -8,6 +8,14 @@ yarn-error.log*
 lerna-debug.log*
 .pnpm-debug.log*
 
+/public/bg*.mp4
+/public/bg1.mp4
+/public/bg2.mp4
+
+/public/bg3.mp4
+/public/bg4.mp4
+
+/public/*.mp4
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
